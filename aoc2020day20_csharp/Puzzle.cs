@@ -50,8 +50,14 @@ namespace aoc2020day20_csharp
             if (Lösung[0,0]==null)
             {
                 var ecke = FindeIrgendEineEcke();
-                Lösung[0, 0] = ecke;
                 ÜbrigeTeile.Remove(ecke);
+                // richtig hindrehen
+                while (MatchesAny(ecke.top, ÜbrigeTeile) ||
+                       MatchesAny(ecke.left, ÜbrigeTeile))
+                {
+                    ecke.Rotate();
+                }
+                Lösung[0, 0] = ecke;
             }
             else
             {
