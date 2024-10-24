@@ -54,79 +54,77 @@ Tile 3:
         {
             var input = @"
 Tile 1:
-#..
-...
-...
+22A
+2.A
+BBA
 
 Tile 2:
-###
-#..
-##.
+A11
+A.1
+ACC
 
 Tile 3:
-##.
-3.a
-...
+BBA
+3.D
+33D
 
 Tile 4:
-.a.
-4b4
-444
+ACC
+D.4
+D44
 ";
 
             var p = new Puzzle(input);
 
             p.FindeNächstesTeil();
-            Assert.That(p.Lösung[0, 0]?.id, Is.EqualTo(2), message:"ecke passt nicht");
+            Assert.That(p.Lösung[0, 0]?.id, Is.EqualTo(1), message:"ecke passt nicht");
 
             p.FindeNächstesTeil();
-            Assert.That(p.Lösung[1, 0]?.id, Is.EqualTo(1), message:"teil rechts von der ecke passt nicht");
+            Assert.That(p.Lösung[1, 0]?.id, Is.EqualTo(2), message:"teil rechts von der ecke passt nicht");
 
             p.FindeNächstesTeil();
             Assert.That(p.Lösung[0, 1]?.id, Is.EqualTo(3), message:"teil unter der ecke passt nicht");
 
             p.FindeNächstesTeil();
             Assert.That(p.Lösung[1, 1]?.id, Is.EqualTo(4), message:"teil unten rechts von der ecke passt nicht");
-
-            CollectionAssert.AreEqual(p.Lösung[0, 0].lines, new[]
-            {
-                "###",
-                "#..",
-                "##."
-            });
-
         }
-
 
         [Test]
         public void Kann_Einzelne_Teile_Finden_und_rotieren()
         {
             var input = @"
 Tile 1:
-#..
+c..
 ...
-...
+.vv
 
 Tile 2:
-###
-#.#
-..#
+yxa
+z.b
+..c
 
 Tile 3:
-##.
-3.a
-...
+.d.
+z..
+y3.
 
 Tile 4:
-.a.
-4b4
-444
+.d.
+4bv
+44v
 ";
 
             var p = new Puzzle(input);
 
             p.FindeNächstesTeil();
             Assert.That(p.Lösung[0, 0]?.id, Is.EqualTo(2), message:"ecke passt nicht");
+
+            CollectionAssert.AreEqual(p.Lösung[0, 0].lines, new[]
+            {
+                "abc",
+                "x..",
+                "yz."
+            }, "ecke passt nicht");
 
             p.FindeNächstesTeil();
             Assert.That(p.Lösung[1, 0]?.id, Is.EqualTo(1), message:"teil rechts von der ecke passt nicht");
@@ -136,14 +134,6 @@ Tile 4:
 
             p.FindeNächstesTeil();
             Assert.That(p.Lösung[1, 1]?.id, Is.EqualTo(4), message:"teil unten rechts von der ecke passt nicht");
-
-            CollectionAssert.AreEqual(p.Lösung[0, 0].lines, new[]
-            {
-                "###",
-                "#..",
-                "##."
-            });
-
         }
 
         [Test]
@@ -151,31 +141,31 @@ Tile 4:
         {
             var input = @"
 Tile 1:
-#..
-...
-...
+22A
+2.A
+BBA
 
 Tile 2:
-###
-#..
-##.
+A11
+A.1
+ACC
 
 Tile 3:
-##.
-3.a
-...
+BBA
+3.D
+33D
 
 Tile 4:
-.a.
-4b4
-444
+ACC
+D.4
+D44
 ";
 
             var p = new Puzzle(input);
 
             p.FindeAlleTeile();
-            Assert.That(p.Lösung[0, 0]?.id, Is.EqualTo(2), message:"ecke passt nicht");
-            Assert.That(p.Lösung[1, 0]?.id, Is.EqualTo(1), message:"teil rechts von der ecke passt nicht");
+            Assert.That(p.Lösung[0, 0]?.id, Is.EqualTo(1), message:"ecke passt nicht");
+            Assert.That(p.Lösung[1, 0]?.id, Is.EqualTo(2), message:"teil rechts von der ecke passt nicht");
             Assert.That(p.Lösung[0, 1]?.id, Is.EqualTo(3), message:"teil unter der ecke passt nicht");
             Assert.That(p.Lösung[1, 1]?.id, Is.EqualTo(4), message:"teil unten rechts von der ecke passt nicht");
         }

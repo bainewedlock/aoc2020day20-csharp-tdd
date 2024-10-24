@@ -62,5 +62,10 @@
             ränder = rotated.ToArray();
             
         }
+
+        public bool PasstInEcke(string rand1, string rand2)
+        {
+            return string.Join("|", ränder.Concat(ränder)).Contains($"{rand1}|{rand2}");
+        }
     }
 }
