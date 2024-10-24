@@ -1,4 +1,6 @@
-﻿namespace aoc2020day20_csharp
+﻿using System.Runtime.InteropServices;
+
+namespace aoc2020day20_csharp
 {
     public class PuzzleTeil
     {
@@ -11,7 +13,7 @@
 
         public PuzzleTeil(string input)
         {
-            var lines = input.Split("\r\n");
+            var lines = input.Trim().Split("\r\n");
             id = int.Parse(lines[0].Replace("Tile ", "").Replace(":", ""));
 
             this.lines = lines.Skip(1).Select(x => x.Trim()).ToArray();
@@ -22,5 +24,21 @@
             right = new String(this.lines.Select(x => x[^1]).ToArray());
         }
 
+        public bool PasstZuRand(string rand)
+        {
+            return
+                Check(left, rand) || Check(top, rand) ||
+                Check(bottom, rand) || Check(right, rand);
+        }
+
+        bool Check(string rand, string rand2)
+        {
+            return rand == rand2 || rand == Rev(rand2);
+        }
+
+        string Rev(string left)
+        {
+            return new string(left.Reverse().ToArray());
+        }
     }
 }
