@@ -121,6 +121,7 @@ Tile 3079:
             Assert.That(teile.Length, Is.EqualTo(9));
             Assert.That(teile.Last().id, Is.EqualTo(3079));
             Assert.That(teile[^2].bottom, Is.EqualTo("#.##...##."));
+            Assert.That(puzzle.PuzzleGröße, Is.EqualTo(3));
         }
     }
 }
