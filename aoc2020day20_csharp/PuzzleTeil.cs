@@ -39,5 +39,28 @@
         {
             return new string(left.Reverse().ToArray());
         }
+
+        public void Rotate()
+        {
+            var n = lines.Length;
+            var ls = new List<string>();
+            for (int y=0; y<n; y++)
+            {
+                ls.Add("");
+                for(int x=0; x<n; x++)
+                {
+                    ls[^1] += lines[n-x-1][y];
+                }
+            }
+            lines = ls.ToArray();
+
+
+            var rotated = ränder.Take(3).ToList();
+            rotated.Insert(0, ränder.Last());
+            rotated[0] = Rev(rotated[0]);
+            rotated[2] = Rev(rotated[2]);
+            ränder = rotated.ToArray();
+            
+        }
     }
 }
