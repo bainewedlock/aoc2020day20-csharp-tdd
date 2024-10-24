@@ -9,6 +9,10 @@
 
         static void Main(string[] args)
         {
+            var p = new Puzzle(File.ReadAllText("input.txt"));
+            p.FindeAlleTeile();
+
+
             //using (var gif = AnimatedGif.AnimatedGif.Create("mygif.gif", 33))
             //{
             //    var bmp = new Bitmap(100, 100);
