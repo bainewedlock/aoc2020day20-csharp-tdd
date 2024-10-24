@@ -52,9 +52,9 @@ namespace aoc2020day20_csharp
             {
                 if (Lösung[x, y] == null)
                 {
-                    if (x == 0) // erstes Teil einer Reihe
+                    if (x == 0) // Spalte 0
                     {
-                        if (y == 0) // linke obere ecke
+                        if (y == 0) // Ecke Links Oben
                         {
                             var ecke = FindeIrgendEineEcke();
                             ÜbrigeTeile.Remove(ecke);
@@ -75,9 +75,9 @@ namespace aoc2020day20_csharp
                         Lösung[x, y] = teil;
                         return;
                     }
-                    else
+                    else // ab Spalte 1
                     {
-                        if (y == 0) // obere reihe
+                        if (y == 0) // Reihe 0
                         {
                             var teil_links_davon = Lösung[x - 1, y];
                             var rand = teil_links_davon.right;
@@ -86,24 +86,18 @@ namespace aoc2020day20_csharp
                             ÜbrigeTeile.Remove(teil);
                             return;
                         }
-                        else
+                        else // ab Reihe 1
                         {
                             var teil_links_davon = Lösung[x - 1, y];
                             var rand1 = teil_links_davon.right;
                             var teil_darüber = Lösung[x, y - 1];
                             var rand2 = teil_darüber.bottom;
 
-                            //var teil = GetMatches(rand1, ÜbrigeTeile).Single();
-
                             var teil = ÜbrigeTeile.Single(x => x.PasstInEcke(rand1, rand2));
                             ÜbrigeTeile.Remove(teil);
 
                             while (teil.left != rand1 || teil.top != rand2)
                                 teil.Rotate();
-
-
-                            //var teil = ÜbrigeTeile.Single(x => x.left == rand1
-                            //                            && x.top  == rand2);
 
                             Lösung[x, y] = teil;
                             return;
