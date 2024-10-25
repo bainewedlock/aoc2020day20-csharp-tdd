@@ -66,22 +66,26 @@ namespace aoc2020day20_csharp
                 {
                     var ecke = FindeIrgendEineEcke();
                     ÜbrigeTeile.Remove(ecke);
-                    while (MatchesAny(ecke.top, ÜbrigeTeile) ||
-                           MatchesAny(ecke.left, ÜbrigeTeile))
-                    {
-                        ecke.Rotate();
-                    }
+                    //while (MatchesAny(ecke.top, ÜbrigeTeile) ||
+                    //       MatchesAny(ecke.left, ÜbrigeTeile))
+                    //{
+                    //    ecke.Rotate();
+                    //}
                     Lösung[0, 0] = ecke;
-                    return;
                 }
-                var teil_darüber = Lösung[x, y - 1];
-                var rand = teil_darüber.bottom;
-                var teil = GetMatches(rand, ÜbrigeTeile).Single();
-                ÜbrigeTeile.Remove(teil);
-                while (!teil_darüber.PasstZuRand(teil.top))
-                    teil.Rotate();
-                Lösung[x, y] = teil;
-                return;
+                else // Rest von Spalte 0
+                {
+                    var teil_darüber = Lösung[x, y - 1];
+
+                    var rand = teil_darüber.bottom;
+                    //var teil = GetMatches(rand, ÜbrigeTeile).Single();
+                    var teil = ÜbrigeTeile.First(x =>
+                        x.ränder.Any(r => teil_darüber.PasstZuRand(r)));
+                    ÜbrigeTeile.Remove(teil);
+                    //while (!teil_darüber.PasstZuRand(teil.top))
+                    //    teil.Rotate();
+                    Lösung[x, y] = teil;
+                }
             }
             else // ab Spalte 1
             {
@@ -89,10 +93,10 @@ namespace aoc2020day20_csharp
                 {
                     var teil_links_davon = Lösung[x - 1, y];
                     var rand = teil_links_davon.right;
-                    var teil = GetMatches(rand, ÜbrigeTeile).Single();
+                    var teil = ÜbrigeTeile.First(x =>
+                        x.ränder.Any(r => teil_links_davon.PasstZuRand(r)));
                     Lösung[x, y] = teil;
                     ÜbrigeTeile.Remove(teil);
-                    return;
                 }
                 else // ab Reihe 1
                 {
@@ -101,14 +105,14 @@ namespace aoc2020day20_csharp
                     var teil_darüber = Lösung[x, y - 1];
                     var rand2 = teil_darüber.bottom;
 
-                    var teil = ÜbrigeTeile.Single(x => x.PasstInEcke(rand1, rand2));
+                    var teil = ÜbrigeTeile.Single(x =>
+                        x.ränder.Any(r => teil_links_davon.PasstZuRand(r)));
                     ÜbrigeTeile.Remove(teil);
 
-                    while (teil.left != rand1 || teil.top != rand2)
-                        teil.Rotate();
+                    //while (teil.left != rand1 || teil.top != rand2)
+                    //    teil.Rotate();
 
                     Lösung[x, y] = teil;
-                    return;
                 }
             }
         }
@@ -118,6 +122,38 @@ namespace aoc2020day20_csharp
             while (ÜbrigeTeile.Any())
             {
                 FindeNächstesTeil();
+            }
+        }
+
+        public void DebugRänder()
+        {
+            for(int i=0; i<Teile.Length; i++)
+            {
+                var t1 = Teile[i];
+                var passend = new List<string>();
+                for(int j=0; j<Teile.Length; j++)
+                {
+                    if (i == j) continue;
+                    var t2 = Teile[j];
+
+                    foreach(var r in t2.ränder)
+                    {
+                        if (t1.PasstZuRand(r))
+                        {
+                            passend.Add(r);
+                        }
+                    }
+                }
+                var doppelte =
+                        passend.GroupBy(p => p)
+                               .Where(g => g.Count() > 1)
+                               .Select(g => g.Key)
+                               .ToArray();
+                foreach(var d in doppelte)
+                {
+                    Console.WriteLine($"{t1.id} rand passt mehrfach: {d}");
+
+                }
             }
         }
     }

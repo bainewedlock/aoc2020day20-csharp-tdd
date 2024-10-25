@@ -4,7 +4,7 @@
     {
         public int id;
         public string[] lines;
-        string[] ränder;
+        public string[] ränder;
         public string top => ränder[0];
         public string right => ränder[1];
         public string bottom => ränder[2];
@@ -66,6 +66,11 @@
         public bool PasstInEcke(string rand1, string rand2)
         {
             return string.Join("|", ränder.Concat(ränder)).Contains($"{rand1}|{rand2}");
+        }
+
+        public override string ToString()
+        {
+            return $"{id}";
         }
     }
 }

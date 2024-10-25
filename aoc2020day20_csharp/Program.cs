@@ -10,6 +10,7 @@
         static void Main(string[] args)
         {
             var p = new Puzzle(File.ReadAllText("input.txt"));
+            p.DebugRänder();
             p.FindeAlleTeile();
 
 
