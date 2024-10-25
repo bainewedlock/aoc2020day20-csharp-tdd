@@ -8,3 +8,6 @@ Im Beispiel:
 2971    1489    1171
 
 Hat er rechts oben die 1427 platziert, was aber zu keiner Lösung führt.
+
+
+

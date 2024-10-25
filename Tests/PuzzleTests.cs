@@ -2,10 +2,10 @@
 
 namespace Tests
 {
-    internal class AllesEinlesenTests
+    internal class PuzzleTests
     {
         [Test]
-        public void Test()
+        public void Kann_Alle_Teile_Einlesen()
         {
             var input = @"Tile 2311:
 ..##.#..#.
@@ -122,6 +122,46 @@ Tile 3079:
             Assert.That(teile.Last().id, Is.EqualTo(3079));
             Assert.That(teile[^2].bottom, Is.EqualTo("#.##...##."));
             Assert.That(puzzle.PuzzleGröße, Is.EqualTo(3));
+        }
+
+        [Test]
+        public void Löst_einfache_Zeile()
+        {
+            var input = @"
+Tile 1:
+?AA
+?AA
+?AA
+
+Tile 2:
+ABB
+ABB
+ABB
+
+Tile 3:
+BBC
+BBC
+BBC
+
+Tile 4:
+CCD
+CCD
+CCD
+";
+
+            var p = new Puzzle(input, 4);
+
+            p.FindeNächstesTeil();
+            Assert.That(p.Lösung[0, 0]?.id, Is.EqualTo(1), message: "teil 0,0");
+
+            p.FindeNächstesTeil();
+            Assert.That(p.Lösung[1, 0]?.id, Is.EqualTo(2), message: "teil 1,0");
+
+            p.FindeNächstesTeil();
+            Assert.That(p.Lösung[2, 0]?.id, Is.EqualTo(3), message: "teil 2,0");
+
+            p.FindeNächstesTeil();
+            Assert.That(p.Lösung[3, 0]?.id, Is.EqualTo(4), message: "teil 3,0");
         }
     }
 }

@@ -5,16 +5,17 @@ namespace aoc2020day20_csharp
 {
     public class Puzzle
     {
-        public PuzzleTeil[,] Lösung = new PuzzleTeil[3, 3];
+        public PuzzleTeil[,] Lösung;
         public HashSet<PuzzleTeil> ÜbrigeTeile = new HashSet<PuzzleTeil>();
         public int PuzzleGröße;
 
-        public Puzzle(string input)
+        public Puzzle(string input, int? größe = null)
         {
             var blocks = input.Trim().Split("\r\n\r\n");
             Teile = blocks.Select(x => new PuzzleTeil(x)).ToArray();
             ÜbrigeTeile = new HashSet<PuzzleTeil>(Teile);
-            PuzzleGröße = (int)Math.Sqrt(Teile.Length);
+            PuzzleGröße = größe ?? (int)Math.Sqrt(Teile.Length);
+            Lösung = new PuzzleTeil[PuzzleGröße, PuzzleGröße];
         }
 
         public PuzzleTeil[] Teile;
@@ -26,12 +27,12 @@ namespace aoc2020day20_csharp
                 var kandidat = Teile[i];
                 var andere = Teile.Except([kandidat]).ToArray();
                 var count = 0;
-                if (MatchesAny(kandidat.top, andere)) count++;
-                if (MatchesAny(kandidat.right, andere)) count++;
-                if (MatchesAny(kandidat.bottom, andere)) count++;
-                if (MatchesAny(kandidat.left, andere)) count++;
+                if (!MatchesAny(kandidat.top, andere)) count++;
+                if (!MatchesAny(kandidat.right, andere)) count++;
+                if (!MatchesAny(kandidat.bottom, andere)) count++;
+                if (!MatchesAny(kandidat.left, andere)) count++;
 
-                if (count == 2) return kandidat;
+                if (count >= 2) return kandidat;
             }
             throw new InvalidOperationException("noob");
         }
