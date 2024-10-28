@@ -6,25 +6,23 @@
         public PuzzleTeil? PlatziertesTeil {  get; private set; }
         List<PuzzleTeil> todo_liste = new List<PuzzleTeil>();
         IEnumerator<bool> steps;
+        public bool CanTraverse { get; private set; }
 
         public SearchNode(Puzzle p)
         {
             puzzle = p;
-            todo_liste = puzzle.ÜbrigeTeile.ToList();
+            todo_liste = p.ÜbrigeTeile.ToList();
             if (todo_liste.Any()) CanTraverse = true;
-            steps = Steps().GetEnumerator();
+            steps = StepSequence().GetEnumerator();
         }
-
-        public bool CanTraverse { get; private set; }
 
         public SearchNode Traverse()
         {
             steps.MoveNext();
-
             return new SearchNode(puzzle);
         }
 
-        IEnumerable<bool> Steps()
+        IEnumerable<bool> StepSequence()
         {
             PlatziereTeil();
             yield return true;
@@ -45,7 +43,7 @@
             }
 
             EntferneTeil();
-            steps = Steps().GetEnumerator();
+            steps = StepSequence().GetEnumerator();
             yield return true;
         }
 

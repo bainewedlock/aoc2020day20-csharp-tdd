@@ -54,13 +54,13 @@ namespace aoc2020day20_csharp
         public void Entferne_Teil(PuzzleTeil teil)
         {
             for (int y = 0; y < PuzzleGröße; y++)
-                for (int x = 0; x < PuzzleGröße; x++)
-                    if (Grid[x, y] == teil)
-                    {
-                        Grid[x, y] = null;
-                        ÜbrigeTeile.Add(teil);
-                        return;
-                    }
+            for (int x = 0; x < PuzzleGröße; x++)
+            if (Grid[x, y] == teil)
+            {
+                Grid[x, y] = null;
+                ÜbrigeTeile.Add(teil);
+                return;
+            }
 
             throw new ApplicationException("unerwartet");
         }
@@ -68,9 +68,9 @@ namespace aoc2020day20_csharp
         (int x, int y) FindeTeil(PuzzleTeil teil)
         {
             for (int y = 0; y < PuzzleGröße; y++)
-                for (int x = 0; x < PuzzleGröße; x++)
-                    if (Grid[x, y] == teil)
-                        return (x, y);
+            for (int x = 0; x < PuzzleGröße; x++)
+            if (Grid[x, y] == teil)
+                return (x, y);
             throw new InvalidOperationException("pos nicht gefunden");
         }
 
@@ -128,8 +128,6 @@ namespace aoc2020day20_csharp
                 if (n.PlatziertesTeil != null && Teil_passt(n.PlatziertesTeil))
                 {
                     if (callback != null) callback();
-                    //Console.Clear();
-                    //PrintPuzzle();
 
                     if (!ÜbrigeTeile.Any())
                     {
@@ -167,8 +165,6 @@ namespace aoc2020day20_csharp
                         }
                         else
                         {
-                            //if (!Teil_passt(t))
-                            //    Console.ForegroundColor = ConsoleColor.Red;
                             sb.Append(t.lines[y]);
                         }
                     }
@@ -178,7 +174,7 @@ namespace aoc2020day20_csharp
             return lines.ToArray();
         }
 
-        void PrintPuzzle()
+        public void PrintPuzzle()
         {
             for (int py = 0; py < PuzzleGröße; py++)
             {
@@ -200,6 +196,5 @@ namespace aoc2020day20_csharp
         {
             return (Grid[0, 0] ?? ÜbrigeTeile.First()).top.Length;
         }
-
     }
 }

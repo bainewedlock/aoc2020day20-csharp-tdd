@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-
-namespace aoc2020day20_csharp
+﻿namespace aoc2020day20_csharp
 {
     public class PuzzleTeil
     {
@@ -24,19 +22,11 @@ namespace aoc2020day20_csharp
 
         void UpdateRänder()
         {
-
-            var top = this.lines[0];
-            var bottom = this.lines[^1];
-            var left = new String(this.lines.Select(x => x[0]).ToArray());
-            var right = new String(this.lines.Select(x => x[^1]).ToArray());
+            var top = lines[0];
+            var bottom = lines[^1];
+            var left = new String(lines.Select(x => x[0]).ToArray());
+            var right = new String(lines.Select(x => x[^1]).ToArray());
             ränder = [top, right, bottom, left];
-        }
-
-        public PuzzleTeil(PuzzleTeil o)
-        {
-            id = o.id;
-            lines = o.lines.ToArray();
-            ränder = o.ränder.ToArray();
         }
 
         public bool PasstZuRand(string rand)
@@ -71,16 +61,6 @@ namespace aoc2020day20_csharp
             UpdateRänder();
         }
 
-        public bool PasstInEcke(string rand1, string rand2)
-        {
-            return string.Join("|", ränder.Concat(ränder)).Contains($"{rand1}|{rand2}");
-        }
-
-        public override string ToString()
-        {
-            return $"{id}";
-        }
-
         public void Flip()
         {
             for (int i=0; i<lines.Length; i++)
@@ -91,9 +71,9 @@ namespace aoc2020day20_csharp
             UpdateRänder();
         }
 
-        public PuzzleTeil Copy()
+        public override string ToString()
         {
-            return new PuzzleTeil(this);
+            return $"{id}";
         }
     }
 }
