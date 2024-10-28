@@ -27,7 +27,7 @@ namespace aoc2020day20_csharp
             Console.WriteLine($"{gif_name} written.");
 
             // Puzzle Lösung berechnen
-            p.PrintPuzzle();
+            //p.PrintPuzzle();
             var u = p.Grid.GetLength(0) - 1;
             long a = p.Grid[0, 0].id;
             long b = p.Grid[u, 0].id;
