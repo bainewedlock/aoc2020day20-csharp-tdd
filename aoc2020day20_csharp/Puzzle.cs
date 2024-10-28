@@ -1,4 +1,6 @@
-﻿namespace aoc2020day20_csharp
+﻿using System.Text;
+
+namespace aoc2020day20_csharp
 {
     public class Puzzle
     {
@@ -110,12 +112,9 @@
         }
 
         Stack<SearchNode> search_nodes = new Stack<SearchNode>();
-        int step_count = 0;
 
-        public bool SolveStep()
+        public bool SolveStep(Action callback = null)
         {
-            step_count += 1;
-
             if (!search_nodes.Any())
             {
                 search_nodes.Push(new SearchNode(this));
@@ -128,6 +127,7 @@
                 var n2 = n.Traverse();
                 if (n.PlatziertesTeil != null && Teil_passt(n.PlatziertesTeil))
                 {
+                    if (callback != null) callback();
                     //Console.Clear();
                     //PrintPuzzle();
 
@@ -148,6 +148,36 @@
             return false;
         }
 
+        public string[] ToLines()
+        {
+            var n = GetTeilGröße();
+            var lines = new List<string>();
+
+            for (int py=0; py<PuzzleGröße; py++)
+            {
+                for (int y = 0; y < n; y++)
+                {
+                    var sb = new StringBuilder();
+                    for (var px=0; px<PuzzleGröße; px++)
+                    {
+                        var t = Grid[px, py];
+                        if (t == null)
+                        {
+                            sb.Append(new String('.', n));
+                        }
+                        else
+                        {
+                            //if (!Teil_passt(t))
+                            //    Console.ForegroundColor = ConsoleColor.Red;
+                            sb.Append(t.lines[y]);
+                        }
+                    }
+                    lines.Add(sb.ToString());
+                }
+            }
+            return lines.ToArray();
+        }
+
         void PrintPuzzle()
         {
             for (int py = 0; py < PuzzleGröße; py++)
@@ -160,33 +190,10 @@
                 Console.WriteLine(String.Join(" ", ids));
             }
 
-            var n = GetTeilGröße();
-
-            for (int py=0; py<PuzzleGröße; py++)
+            foreach(var line in ToLines())
             {
-                for (int y = 0; y < n; y++)
-                {
-                    for (var px=0; px<PuzzleGröße; px++)
-                    {
-                        var t = Grid[px, py];
-                        if (t == null)
-                        {
-                            Console.Write(new String('.', n));
-                        }
-                        else
-                        {
-                            if (!Teil_passt(t))
-                                Console.ForegroundColor = ConsoleColor.Red;
-                            Console.Write(t.lines[y]);
-                                Console.ForegroundColor = ConsoleColor.White;
-                        }
-                        Console.Write(" ");
-                    }
-                    Console.WriteLine();
-                }
-                Console.WriteLine();
+                Console.WriteLine(line);
             }
-
         }
 
         int GetTeilGröße()
