@@ -37,7 +37,7 @@
         void PlatziereTeil()
         {
             platziertes_teil = todo_liste.First();
-            puzzle.Plaziere_Teil(platziertes_teil);
+            puzzle.Platziere_Teil(platziertes_teil);
             todo_liste.RemoveAt(0);
         }
 
@@ -57,6 +57,7 @@
             if (transform_count == 0)
             {
                 if(!todo_liste.Any()) CanTraverse = false;
+                puzzle.Entferne_Teil(platziertes_teil);
                 platziertes_teil = null;
             }
         }

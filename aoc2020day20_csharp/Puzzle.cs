@@ -58,7 +58,7 @@ namespace aoc2020day20_csharp
             return GetMatches(rand, teile).Any();
         }
 
-        public void Plaziere_Teil(PuzzleTeil teil)
+        public void Platziere_Teil(PuzzleTeil teil)
         {
             if (!ÜbrigeTeile.Contains(teil))
                 throw new ArgumentException("das ist kein übriges Teil!");
@@ -66,7 +66,15 @@ namespace aoc2020day20_csharp
             var (x, y) = FindNextPos();
             Grid[x, y] = teil;
             ÜbrigeTeile.Remove(teil);
+        }
 
+        public void Entferne_Teil(PuzzleTeil teil)
+        {
+            for (int y = 0; y < PuzzleGröße; y++)
+                for (int x = 0; x < PuzzleGröße; x++)
+                    if (Grid[x, y] == teil) Grid[x, y] = null;
+
+            ÜbrigeTeile.Add(teil);
         }
 
         (int x, int y) FindNextPos()
