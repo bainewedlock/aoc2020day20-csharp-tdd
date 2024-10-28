@@ -79,5 +79,21 @@ Tile 1:
 
             Assert.That(teil.PasstZuRand(rand), Is.True);
         }
+
+        [Test]
+        public void Flip()
+        {
+            var teil = new PuzzleTeil(@"Tile 1:
+                                        123
+                                        456
+                                        789");
+            teil.Flip();
+            CollectionAssert.AreEqual(teil.lines, new[] {
+                                       "321",
+                                       "654",
+                                       "987"
+            });
+
+        }
     }
 }

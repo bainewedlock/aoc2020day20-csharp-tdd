@@ -1,11 +1,11 @@
-﻿using System.Runtime.InteropServices;
-using Microsoft.VisualBasic;
+﻿using System.Globalization;
 
 namespace aoc2020day20_csharp
 {
     public class Puzzle
     {
-        public PuzzleTeil[,] Lösung;
+        public PuzzleTeil[] Teile;
+        public PuzzleTeil[,] Grid;
         public HashSet<PuzzleTeil> ÜbrigeTeile = new HashSet<PuzzleTeil>();
         public int PuzzleGröße;
 
@@ -15,26 +15,37 @@ namespace aoc2020day20_csharp
             Teile = blocks.Select(x => new PuzzleTeil(x)).ToArray();
             ÜbrigeTeile = new HashSet<PuzzleTeil>(Teile);
             PuzzleGröße = größe ?? (int)Math.Sqrt(Teile.Length);
-            Lösung = new PuzzleTeil[PuzzleGröße, PuzzleGröße];
+            Grid = new PuzzleTeil[PuzzleGröße, PuzzleGröße];
         }
 
-        public PuzzleTeil[] Teile;
+        public Puzzle(Puzzle o)
+        {
+            Teile = o.Teile.Select(t => t.Copy()).ToArray();
+            Grid = o.Grid;
+            ÜbrigeTeile = new HashSet<PuzzleTeil>(
+                o.ÜbrigeTeile.Select(t => t.Copy()));
+            PuzzleGröße = o.PuzzleGröße;
+        }
 
         public PuzzleTeil FindeIrgendEineEcke()
         {
             for (int i = 0; i < Teile.Length; i++)
             {
-                var kandidat = Teile[i];
-                var andere = Teile.Except([kandidat]).ToArray();
-                var count = 0;
-                if (!MatchesAny(kandidat.top, andere)) count++;
-                if (!MatchesAny(kandidat.right, andere)) count++;
-                if (!MatchesAny(kandidat.bottom, andere)) count++;
-                if (!MatchesAny(kandidat.left, andere)) count++;
-
-                if (count >= 2) return kandidat;
+                if (IstEckteil(Teile[i])) return Teile[i];
             }
             throw new InvalidOperationException("noob");
+        }
+
+        public bool IstEckteil(PuzzleTeil kandidat)
+        {
+            var andere = Teile.Where(x => x.id != kandidat.id).ToArray();
+            var count = 0;
+            if (!MatchesAny(kandidat.top, andere)) count++;
+            if (!MatchesAny(kandidat.right, andere)) count++;
+            if (!MatchesAny(kandidat.bottom, andere)) count++;
+            if (!MatchesAny(kandidat.left, andere)) count++;
+
+            return count >= 2;
         }
 
         PuzzleTeil[] GetMatches(string rand, IEnumerable<PuzzleTeil> teile)
@@ -51,78 +62,68 @@ namespace aoc2020day20_csharp
         {
             for (int y = 0; y < PuzzleGröße; y++)
                 for (int x = 0; x < PuzzleGröße; x++)
-                    if (Lösung[x, y] == null)
+                    if (Grid[x, y] == null)
                         return (false, x, y);
             return (true, 0, 0);
         }
 
-        public void FindeNächstesTeil()
+        public bool Teil_passt(int x, int y)
         {
-            var (done, x, y) = FindNextPos();
-            if (done) return;
+            var teil = Grid[x, y];
+            string rand_oben = "";
+            string rand_links = "";
 
             if (x == 0) // Spalte 0
             {
                 if (y == 0) // Ecke Links Oben
                 {
-                    var ecke = FindeIrgendEineEcke();
-                    ÜbrigeTeile.Remove(ecke);
-                    //while (MatchesAny(ecke.top, ÜbrigeTeile) ||
-                    //       MatchesAny(ecke.left, ÜbrigeTeile))
-                    //{
-                    //    ecke.Rotate();
-                    //}
-                    Lösung[0, 0] = ecke;
+                    return IstEckteil(teil);
                 }
                 else // Rest von Spalte 0
                 {
-                    var teil_darüber = Lösung[x, y - 1];
-
-                    var rand = teil_darüber.bottom;
-                    //var teil = GetMatches(rand, ÜbrigeTeile).Single();
-                    var teil = ÜbrigeTeile.First(x =>
-                        x.ränder.Any(r => teil_darüber.PasstZuRand(r)));
-                    ÜbrigeTeile.Remove(teil);
-                    //while (!teil_darüber.PasstZuRand(teil.top))
-                    //    teil.Rotate();
-                    Lösung[x, y] = teil;
+                    rand_oben = Grid[x, y-1].bottom;
                 }
             }
             else // ab Spalte 1
             {
-                if (y == 0) // Reihe 0
+                rand_links = Grid[x - 1, y].right;
+
+                if (y > 0) // ab Reihe 1
                 {
-                    var teil_links_davon = Lösung[x - 1, y];
-                    var rand = teil_links_davon.right;
-                    var teil = ÜbrigeTeile.First(x =>
-                        x.ränder.Any(r => teil_links_davon.PasstZuRand(r)));
-                    Lösung[x, y] = teil;
-                    ÜbrigeTeile.Remove(teil);
+                    rand_oben = Grid[x, y - 1].bottom;
                 }
-                else // ab Reihe 1
-                {
-                    var teil_links_davon = Lösung[x - 1, y];
-                    var rand1 = teil_links_davon.right;
-                    var teil_darüber = Lösung[x, y - 1];
-                    var rand2 = teil_darüber.bottom;
+            }
 
-                    var teil = ÜbrigeTeile.Single(x =>
-                        x.ränder.Any(r => teil_links_davon.PasstZuRand(r)));
-                    ÜbrigeTeile.Remove(teil);
+            return teil.top.StartsWith(rand_oben) &&
+                   teil.left.StartsWith(rand_links);
+        }
 
-                    //while (teil.left != rand1 || teil.top != rand2)
-                    //    teil.Rotate();
+        Stack<SearchNode> search_nodes = new Stack<SearchNode>();
 
-                    Lösung[x, y] = teil;
-                }
+        public void SolveStep()
+        {
+            if (!search_nodes.Any())
+            {
+                search_nodes.Push(new SearchNode(this));
+            }
+
+            var n = search_nodes.First();
+
+            if (n.CanTraverse)
+            {
+                search_nodes.Push(n.Traverse());
+            }
+            else
+            {
+                search_nodes.Pop();
             }
         }
 
-        public void FindeAlleTeile()
+        public void SolveAll()
         {
-            while (ÜbrigeTeile.Any())
+            while (ÜbrigeTeile.Any()) // todo
             {
-                FindeNächstesTeil();
+                SolveStep();
             }
         }
 

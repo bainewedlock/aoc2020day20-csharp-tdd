@@ -11,7 +11,7 @@
         {
             var p = new Puzzle(File.ReadAllText("input.txt"));
             p.DebugRänder();
-            p.FindeAlleTeile();
+            p.SolveAll();
 
 
             //using (var gif = AnimatedGif.AnimatedGif.Create("mygif.gif", 33))
