@@ -83,15 +83,20 @@ Tile 1:
         [Test]
         public void Flip()
         {
-            var teil = new PuzzleTeil(@"Tile 1:
+            var p = new PuzzleTeil(@"Tile 1:
                                         123
                                         456
                                         789");
-            teil.Flip();
+            p.Flip();
             CollectionAssert.AreEqual(new[] {
                                        "321",
                                        "654",
-                                       "987" }, teil.lines);
+                                       "987" }, p.lines);
+
+            Assert.That(p.top, Is.EqualTo("321"));
+            Assert.That(p.right, Is.EqualTo("147"));
+            Assert.That(p.bottom  , Is.EqualTo("987"));
+            Assert.That(p.left, Is.EqualTo("369"));
 
         }
     }

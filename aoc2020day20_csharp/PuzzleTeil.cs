@@ -19,6 +19,11 @@ namespace aoc2020day20_csharp
 
             this.lines = lines.Skip(1).Select(x => x.Trim()).ToArray();
 
+            UpdateRänder();
+        }
+
+        void UpdateRänder()
+        {
 
             var top = this.lines[0];
             var bottom = this.lines[^1];
@@ -63,13 +68,7 @@ namespace aoc2020day20_csharp
             }
             lines = ls.ToArray();
 
-
-            var rotated = ränder.Take(3).ToList();
-            rotated.Insert(0, ränder.Last());
-            rotated[0] = Rev(rotated[0]);
-            rotated[2] = Rev(rotated[2]);
-            ränder = rotated.ToArray();
-            
+            UpdateRänder();
         }
 
         public bool PasstInEcke(string rand1, string rand2)
@@ -88,8 +87,8 @@ namespace aoc2020day20_csharp
             {
                 lines[i] = Rev(lines[i]);
             }
-            ränder[0] = Rev(ränder[0]);
-            ränder[2] = Rev(ränder[2]);
+
+            UpdateRänder();
         }
 
         public PuzzleTeil Copy()

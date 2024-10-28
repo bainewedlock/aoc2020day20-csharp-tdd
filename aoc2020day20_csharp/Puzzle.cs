@@ -113,9 +113,12 @@
         }
 
         Stack<SearchNode> search_nodes = new Stack<SearchNode>();
+        int step_count = 0;
 
         public bool SolveStep()
         {
+            step_count += 1;
+
             if (!search_nodes.Any())
             {
                 search_nodes.Push(new SearchNode(this));
@@ -126,10 +129,11 @@
             if (n.CanTraverse)
             {
                 var n2 = n.Traverse();
-                //PrintPuzzle();
+                Console.Clear();
+                PrintPuzzle();
                 if (n.PlatziertesTeil != null && Teil_passt(n.PlatziertesTeil))
                 {
-                    //Console.WriteLine($"teil {n.PlatziertesTeil.id} passt");
+
                     if (!ÜbrigeTeile.Any())
                     {
                         return true;
@@ -149,7 +153,18 @@
 
         void PrintPuzzle()
         {
+            for (int py = 0; py < PuzzleGröße; py++)
+            {
+                var ids = new List<int>();
+                for (var px = 0; px < PuzzleGröße; px++)
+                {
+                    ids.Add(Grid[px, py]?.id ?? 0);
+                }
+                Console.WriteLine(String.Join(" ", ids));
+            }
+
             var n = GetTeilGröße();
+
             for (int py=0; py<PuzzleGröße; py++)
             {
                 for (int y = 0; y < n; y++)
@@ -163,7 +178,10 @@
                         }
                         else
                         {
+                            if (!Teil_passt(t))
+                                Console.ForegroundColor = ConsoleColor.Red;
                             Console.Write(t.lines[y]);
+                                Console.ForegroundColor = ConsoleColor.White;
                         }
                         Console.Write(" ");
                     }
@@ -171,6 +189,7 @@
                 }
                 Console.WriteLine();
             }
+
         }
 
         int GetTeilGröße()
