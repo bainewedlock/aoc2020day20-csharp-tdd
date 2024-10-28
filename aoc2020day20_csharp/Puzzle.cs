@@ -201,36 +201,5 @@ namespace aoc2020day20_csharp
             return (Grid[0, 0] ?? ÜbrigeTeile.First()).top.Length;
         }
 
-        public void DebugRänder()
-        {
-            for(int i=0; i<Teile.Length; i++)
-            {
-                var t1 = Teile[i];
-                var passend = new List<string>();
-                for(int j=0; j<Teile.Length; j++)
-                {
-                    if (i == j) continue;
-                    var t2 = Teile[j];
-
-                    foreach(var r in t2.ränder)
-                    {
-                        if (t1.PasstZuRand(r))
-                        {
-                            passend.Add(r);
-                        }
-                    }
-                }
-                var doppelte =
-                        passend.GroupBy(p => p)
-                               .Where(g => g.Count() > 1)
-                               .Select(g => g.Key)
-                               .ToArray();
-                foreach(var d in doppelte)
-                {
-                    Console.WriteLine($"{t1.id} rand passt mehrfach: {d}");
-
-                }
-            }
-        }
     }
 }
