@@ -43,6 +43,8 @@
 
         void BewegeTeil()
         {
+            Console.WriteLine($"bewege teil {PlatziertesTeil.id} ({transform_count})");
+
             if (transform_count == 4)
             {
                 PlatziertesTeil.Flip();

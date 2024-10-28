@@ -16,24 +16,6 @@
             Grid = new PuzzleTeil[PuzzleGröße, PuzzleGröße];
         }
 
-        public Puzzle(Puzzle o)
-        {
-            Teile = o.Teile.Select(t => t.Copy()).ToArray();
-            Grid = o.Grid;
-            ÜbrigeTeile = new HashSet<PuzzleTeil>(
-                o.ÜbrigeTeile.Select(t => t.Copy()));
-            PuzzleGröße = o.PuzzleGröße;
-        }
-
-        public PuzzleTeil FindeIrgendEineEcke()
-        {
-            for (int i = 0; i < Teile.Length; i++)
-            {
-                if (IstEckteil(Teile[i])) return Teile[i];
-            }
-            throw new InvalidOperationException("noob");
-        }
-
         public bool IstEckteil(PuzzleTeil kandidat)
         {
             var andere = Teile.Where(x => x.id != kandidat.id).ToArray();
@@ -65,6 +47,9 @@
             Grid[x, y] = teil;
             if (!ÜbrigeTeile.Remove(teil))
                 throw new ApplicationException("unerwartet");
+
+
+            Console.WriteLine($"teil {teil.id} platziert auf {x},{y}");
         }
 
         public void Entferne_Teil(PuzzleTeil teil)
@@ -73,6 +58,7 @@
                 for (int x = 0; x < PuzzleGröße; x++)
                     if (Grid[x, y] == teil)
                     {
+                        Console.WriteLine($"teil {teil.id} entfernt von {x},{y}");
                         Grid[x, y] = null;
                         ÜbrigeTeile.Add(teil);
                         return;
@@ -98,7 +84,6 @@
         public bool Teil_passt(PuzzleTeil teil)
         {
             var (x,y) = FindeTeil(teil);
-
 
             string rand_oben = "";
             string rand_links = "";
@@ -142,8 +127,10 @@
             if (n.CanTraverse)
             {
                 var n2 = n.Traverse();
+                PrintPuzzle();
                 if (n.PlatziertesTeil != null && Teil_passt(n.PlatziertesTeil))
                 {
+                    Console.WriteLine($"teil {n.PlatziertesTeil.id} passt");
                     if (!ÜbrigeTeile.Any())
                     {
                         return true;
@@ -159,6 +146,37 @@
                 search_nodes.Pop();
             }
             return false;
+        }
+
+        void PrintPuzzle()
+        {
+            var n = GetTeilGröße();
+            for (int py=0; py<PuzzleGröße; py++)
+            {
+                for (int y = 0; y < n; y++)
+                {
+                    for (var px=0; px<PuzzleGröße; px++)
+                    {
+                        var t = Grid[px, py];
+                        if (t == null)
+                        {
+                            Console.Write(new String('.', n));
+                        }
+                        else
+                        {
+                            Console.Write(t.lines[y]);
+                        }
+                        Console.Write(" ");
+                    }
+                    Console.WriteLine();
+                }
+                Console.WriteLine();
+            }
+        }
+
+        int GetTeilGröße()
+        {
+            return (Grid[0, 0] ?? ÜbrigeTeile.First()).top.Length;
         }
 
         public void SolveAll()
