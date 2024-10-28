@@ -35,7 +35,6 @@ namespace aoc2020day20_csharp
                     gif.AddFrame(bmp, delay: delay, quality: GifQuality.Bit8);
                 }
 
-                int n = 0;
                 while (!p.SolveStep(() => add_frame(-1)))
                 {
                 }
