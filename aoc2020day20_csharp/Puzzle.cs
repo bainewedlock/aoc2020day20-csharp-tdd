@@ -129,10 +129,10 @@
             if (n.CanTraverse)
             {
                 var n2 = n.Traverse();
-                Console.Clear();
-                PrintPuzzle();
                 if (n.PlatziertesTeil != null && Teil_passt(n.PlatziertesTeil))
                 {
+                    Console.Clear();
+                    PrintPuzzle();
 
                     if (!ÜbrigeTeile.Any())
                     {
@@ -234,6 +234,19 @@
 
                 }
             }
+        }
+
+        public void Part1()
+        {
+            SolveAll();
+            var u = Grid.GetLength(0)-1;
+            long a = Grid[0, 0].id;
+            long b = Grid[u, 0].id;
+            long c = Grid[u, u].id;
+            long d = Grid[0, u].id;
+
+            Console.WriteLine($"part 1 : {a*b*c*d}");
+            Console.WriteLine("66020135789767 is correct");
         }
     }
 }

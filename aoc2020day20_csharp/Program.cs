@@ -6,7 +6,8 @@
         {
             var p = new Puzzle(File.ReadAllText("input.txt"));
             p.DebugRänder();
-            p.SolveAll();
+            p.Part1();
+
 
             //using (var gif = AnimatedGif.AnimatedGif.Create("mygif.gif", 33))
             //{
