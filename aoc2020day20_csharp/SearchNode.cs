@@ -3,7 +3,7 @@
     public class SearchNode
     {
         Puzzle puzzle;
-        PuzzleTeil? platziertes_teil = null;
+        public PuzzleTeil? PlatziertesTeil {  get; private set; }
         List<PuzzleTeil> todo_liste = new List<PuzzleTeil>();
         int transform_count = 7;
 
@@ -18,7 +18,7 @@
 
         public SearchNode Traverse()
         {
-            if (platziertes_teil == null)
+            if (PlatziertesTeil == null)
             {
                 PlatziereTeil();
             }
@@ -36,8 +36,8 @@
 
         void PlatziereTeil()
         {
-            platziertes_teil = todo_liste.First();
-            puzzle.Platziere_Teil(platziertes_teil);
+            PlatziertesTeil = todo_liste.First();
+            puzzle.Platziere_Teil(PlatziertesTeil);
             todo_liste.RemoveAt(0);
         }
 
@@ -45,11 +45,11 @@
         {
             if (transform_count == 4)
             {
-                platziertes_teil.Flip();
+                PlatziertesTeil.Flip();
             }
             else
             {
-                platziertes_teil.Rotate();
+                PlatziertesTeil.Rotate();
             }
 
             transform_count -= 1;
@@ -57,8 +57,8 @@
             if (transform_count == 0)
             {
                 if(!todo_liste.Any()) CanTraverse = false;
-                puzzle.Entferne_Teil(platziertes_teil);
-                platziertes_teil = null;
+                puzzle.Entferne_Teil(PlatziertesTeil);
+                PlatziertesTeil = null;
             }
         }
     }

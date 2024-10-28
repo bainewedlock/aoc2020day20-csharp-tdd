@@ -63,7 +63,7 @@ namespace aoc2020day20_csharp
             if (!ÜbrigeTeile.Contains(teil))
                 throw new ArgumentException("das ist kein übriges Teil!");
 
-            var (x, y) = FindNextPos();
+            var (x, y) = FindeFreiePos();
             Grid[x, y] = teil;
             ÜbrigeTeile.Remove(teil);
         }
@@ -77,18 +77,32 @@ namespace aoc2020day20_csharp
             ÜbrigeTeile.Add(teil);
         }
 
-        (int x, int y) FindNextPos()
+        (int x, int y) FindeTeil(PuzzleTeil teil)
         {
             for (int y = 0; y < PuzzleGröße; y++)
                 for (int x = 0; x < PuzzleGröße; x++)
-                    if (Grid[x, y] == null)
+                    if (Grid[x, y] == teil)
                         return (x, y);
-            throw new InvalidOperationException("keine freie pos mehr!");
+            throw new InvalidOperationException("pos nicht gefunden");
         }
 
-        public bool Teil_passt(int x, int y)
+        (int x, int y) FindeFreiePos()
         {
-            var teil = Grid[x, y];
+            return FindeTeil(null);
+            //for (int y = 0; y < PuzzleGröße; y++)
+            //    for (int x = 0; x < PuzzleGröße; x++)
+            //        if (Grid[x, y] == null)
+            //            return (x, y);
+            //throw new InvalidOperationException("keine freie pos mehr!");
+        }
+
+
+
+        public bool Teil_passt(PuzzleTeil teil)
+        {
+            var (x,y) = FindeTeil(teil);
+
+
             string rand_oben = "";
             string rand_links = "";
 
@@ -119,7 +133,7 @@ namespace aoc2020day20_csharp
 
         Stack<SearchNode> search_nodes = new Stack<SearchNode>();
 
-        public void SolveStep()
+        public bool SolveStep()
         {
             if (!search_nodes.Any())
             {
@@ -130,19 +144,30 @@ namespace aoc2020day20_csharp
 
             if (n.CanTraverse)
             {
-                search_nodes.Push(n.Traverse());
+                var n2 = n.Traverse();
+                if (n.PlatziertesTeil != null && Teil_passt(n.PlatziertesTeil))
+                {
+                    if (!ÜbrigeTeile.Any())
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        search_nodes.Push(n2);
+                    }
+                }
             }
             else
             {
                 search_nodes.Pop();
             }
+            return false;
         }
 
         public void SolveAll()
         {
-            while (ÜbrigeTeile.Any()) // todo
+            while (!SolveStep()) 
             {
-                SolveStep();
             }
         }
 
