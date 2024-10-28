@@ -72,7 +72,7 @@ namespace Tests
         }
 
         [Test]
-        public void Traverse_probiert_alle_Puzzle_Stellungen_aus()
+        public void Traverse_probiert_alle_Möglichkeiten_ein_Teil_zu_positionieren()
         {
             var p = new Puzzle(@"Tile 123:
                                  12
@@ -81,47 +81,71 @@ namespace Tests
             var n = new SearchNode(p);
             n.Traverse();
             var t = p.Grid[0, 0];
-            CollectionAssert.AreEqual(t.lines, new[] {
+            CollectionAssert.AreEqual(new[] {
                                       "12",
-                                      "34" });
+                                      "34" }, t.lines);
 
             n.Traverse();
-            CollectionAssert.AreEqual(t.lines, new[] {
+            CollectionAssert.AreEqual(new[] {
                                       "31",
-                                      "42" });
+                                      "42" }, t.lines);
 
             n.Traverse();
-            CollectionAssert.AreEqual(t.lines, new[] {
+            CollectionAssert.AreEqual(new[] {
                                       "43",
-                                      "21" });
+                                      "21" }, t.lines);
 
             n.Traverse();
-            CollectionAssert.AreEqual(t.lines, new[] {
+            CollectionAssert.AreEqual(new[] {
                                       "24",
-                                      "13" });
+                                      "13" }, t.lines);
 
             n.Traverse(); // flip
-            CollectionAssert.AreEqual(t.lines, new[] {
+            CollectionAssert.AreEqual(new[] {
                                       "42",
-                                      "31" });
+                                      "31" }, t.lines);
 
             n.Traverse();
-            CollectionAssert.AreEqual(t.lines, new[] {
+            CollectionAssert.AreEqual(new[] {
                                       "34",
-                                      "12" });
+                                      "12" }, t.lines);
 
             n.Traverse();
-            CollectionAssert.AreEqual(t.lines, new[] {
+            CollectionAssert.AreEqual(new[] {
                                       "13",
-                                      "24" });
+                                      "24" }, t.lines);
 
             Assert.True(n.CanTraverse);
             n.Traverse();
-            CollectionAssert.AreEqual(t.lines, new[] {
+            CollectionAssert.AreEqual(new[] {
                                       "21",
-                                      "43" });
+                                      "43" }, t.lines);
 
             Assert.False(n.CanTraverse);
+        }
+
+        [Test]
+        public void Traverse_probiert_weiteres_Teil_falls_möglich()
+        {
+            var p = new Puzzle(@"Tile 123:
+                                 12
+                                 34
+
+                                 Tile 456:
+                                 56
+                                 78", 2);
+
+            var n = new SearchNode(p);
+            for (int i = 0; i < 8; i++) n.Traverse();
+
+            Assert.True(n.CanTraverse);
+            n.Traverse();
+
+            CollectionAssert.AreEqual(new[]
+            {
+                "56",
+                "78"
+            }, p.Grid[0,0].lines);
         }
 
 

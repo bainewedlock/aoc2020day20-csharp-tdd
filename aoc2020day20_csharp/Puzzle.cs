@@ -58,13 +58,24 @@ namespace aoc2020day20_csharp
             return GetMatches(rand, teile).Any();
         }
 
-        (bool found, int x, int y) FindNextPos()
+        public void Plaziere_Teil(PuzzleTeil teil)
+        {
+            if (!ÜbrigeTeile.Contains(teil))
+                throw new ArgumentException("das ist kein übriges Teil!");
+
+            var (x, y) = FindNextPos();
+            Grid[x, y] = teil;
+            ÜbrigeTeile.Remove(teil);
+
+        }
+
+        (int x, int y) FindNextPos()
         {
             for (int y = 0; y < PuzzleGröße; y++)
                 for (int x = 0; x < PuzzleGröße; x++)
                     if (Grid[x, y] == null)
-                        return (false, x, y);
-            return (true, 0, 0);
+                        return (x, y);
+            throw new InvalidOperationException("keine freie pos mehr!");
         }
 
         public bool Teil_passt(int x, int y)

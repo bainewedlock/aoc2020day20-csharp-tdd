@@ -4,12 +4,14 @@
     {
         Puzzle puzzle;
         PuzzleTeil? platziertes_teil = null;
+        List<PuzzleTeil> todo_liste = new List<PuzzleTeil>();
         int transform_count = 7;
 
         public SearchNode(Puzzle p)
         {
             puzzle = p;
-            if (puzzle.ÜbrigeTeile.Any()) CanTraverse = true;
+            todo_liste = puzzle.ÜbrigeTeile.ToList();
+            if (todo_liste.Any()) CanTraverse = true;
         }
 
         public bool CanTraverse { get; private set; }
@@ -32,21 +34,11 @@
             return new SearchNode(puzzle);
         }
 
-        (int x, int y) FindNextPos()
-        {
-            for (int y = 0; y < puzzle.PuzzleGröße; y++)
-                for (int x = 0; x < puzzle.PuzzleGröße; x++)
-                    if (puzzle.Grid[x, y] == null)
-                        return (x, y);
-            return (-1, -1);
-        }
-
         void PlatziereTeil()
         {
-            var (x, y) = FindNextPos();
-            platziertes_teil = puzzle.ÜbrigeTeile.First();
-            puzzle.Grid[x, y] = platziertes_teil;
-            puzzle.ÜbrigeTeile.Remove(platziertes_teil);
+            platziertes_teil = todo_liste.First();
+            puzzle.Plaziere_Teil(platziertes_teil);
+            todo_liste.RemoveAt(0);
         }
 
         void BewegeTeil()
@@ -64,7 +56,8 @@
 
             if (transform_count == 0)
             {
-                CanTraverse = false;
+                if(!todo_liste.Any()) CanTraverse = false;
+                platziertes_teil = null;
             }
         }
     }

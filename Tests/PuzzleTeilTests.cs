@@ -15,7 +15,7 @@ namespace Tests
 
             p.Rotate();
 
-            CollectionAssert.AreEqual( new[]
+            CollectionAssert.AreEqual(new[]
                 {"631",
                  "742",
                  "853"}, p.lines);
@@ -88,11 +88,10 @@ Tile 1:
                                         456
                                         789");
             teil.Flip();
-            CollectionAssert.AreEqual(teil.lines, new[] {
+            CollectionAssert.AreEqual(new[] {
                                        "321",
                                        "654",
-                                       "987"
-            });
+                                       "987" }, teil.lines);
 
         }
     }

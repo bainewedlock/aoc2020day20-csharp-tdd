@@ -199,9 +199,8 @@ CCD
         }
 
 
-        [Ignore("später")]
         [Test]
-        public void Löst_Zeile_mit_Sackgasse()
+        public void Einfache_Zeile_mit_vertauschten_Teilen()
         {
             var input = @"
 Tile 1:
@@ -230,8 +229,8 @@ BBB
             p.SolveAll();
             Assert.That(p.Grid[0, 0]?.id, Is.EqualTo(1), message: "teil 0,0");
             Assert.That(p.Grid[1, 0]?.id, Is.EqualTo(2), message: "teil 1,0");
-            Assert.That(p.Grid[2, 0]?.id, Is.EqualTo(3), message: "teil 2,0");
-            Assert.That(p.Grid[3, 0]?.id, Is.EqualTo(4), message: "teil 3,0");
+            Assert.That(p.Grid[2, 0]?.id, Is.EqualTo(4), message: "teil 2,0");
+            Assert.That(p.Grid[3, 0]?.id, Is.EqualTo(3), message: "teil 3,0");
 
         }
     }

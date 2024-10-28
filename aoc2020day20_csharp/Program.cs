@@ -13,7 +13,6 @@
             p.DebugRänder();
             p.SolveAll();
 
-
             //using (var gif = AnimatedGif.AnimatedGif.Create("mygif.gif", 33))
             //{
             //    var bmp = new Bitmap(100, 100);
