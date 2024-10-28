@@ -5,44 +5,48 @@
         Puzzle puzzle;
         public PuzzleTeil? PlatziertesTeil {  get; private set; }
         List<PuzzleTeil> todo_liste = new List<PuzzleTeil>();
-        int step = 0;
+        IEnumerator<bool> steps;
 
         public SearchNode(Puzzle p)
         {
             puzzle = p;
             todo_liste = puzzle.ÜbrigeTeile.ToList();
             if (todo_liste.Any()) CanTraverse = true;
+            steps = Steps().GetEnumerator();
         }
 
         public bool CanTraverse { get; private set; }
 
         public SearchNode Traverse()
         {
-            step += 1;
-
-            if (step == 1)
-            {
-                PlatziereTeil();
-            }
-            else if (step == 2 || step == 3 || step == 4)
-            {
-                PlatziertesTeil.Rotate();
-            }
-            else if (step == 5)
-            {
-                PlatziertesTeil.Flip();
-            }
-            else if (step == 6 || step == 7 || step == 8)
-            {
-                PlatziertesTeil.Rotate();
-            }
-            else if (step == 9)
-            {
-                EntferneTeil();
-                step = 0;
-            }
+            steps.MoveNext();
 
             return new SearchNode(puzzle);
+        }
+
+        IEnumerable<bool> Steps()
+        {
+            PlatziereTeil();
+            yield return true;
+
+            for (int i = 0; i < 3; i++)
+            {
+                PlatziertesTeil.Rotate();
+                yield return true;
+            }
+
+            PlatziertesTeil.Flip();
+            yield return true;
+
+            for (int i = 0; i < 3; i++)
+            {
+                PlatziertesTeil.Rotate();
+                yield return true;
+            }
+
+            EntferneTeil();
+            steps = Steps().GetEnumerator();
+            yield return true;
         }
 
         void PlatziereTeil()
