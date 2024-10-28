@@ -48,8 +48,7 @@
             if (!ÜbrigeTeile.Remove(teil))
                 throw new ApplicationException("unerwartet");
 
-
-            Console.WriteLine($"teil {teil.id} platziert auf {x},{y}");
+            //Console.WriteLine($"teil {teil.id} platziert auf {x},{y}");
         }
 
         public void Entferne_Teil(PuzzleTeil teil)
@@ -58,7 +57,7 @@
                 for (int x = 0; x < PuzzleGröße; x++)
                     if (Grid[x, y] == teil)
                     {
-                        Console.WriteLine($"teil {teil.id} entfernt von {x},{y}");
+                        //Console.WriteLine($"teil {teil.id} entfernt von {x},{y}");
                         Grid[x, y] = null;
                         ÜbrigeTeile.Add(teil);
                         return;
@@ -127,10 +126,10 @@
             if (n.CanTraverse)
             {
                 var n2 = n.Traverse();
-                PrintPuzzle();
+                //PrintPuzzle();
                 if (n.PlatziertesTeil != null && Teil_passt(n.PlatziertesTeil))
                 {
-                    Console.WriteLine($"teil {n.PlatziertesTeil.id} passt");
+                    //Console.WriteLine($"teil {n.PlatziertesTeil.id} passt");
                     if (!ÜbrigeTeile.Any())
                     {
                         return true;

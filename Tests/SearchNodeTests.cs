@@ -121,6 +121,9 @@ namespace Tests
                                       "21",
                                       "43" }, t.lines);
 
+            n.Traverse();
+            Assert.IsNull(p.Grid[0, 0]);
+
             Assert.False(n.CanTraverse);
         }
 
@@ -136,7 +139,7 @@ namespace Tests
                                  78", 2);
 
             var n = new SearchNode(p);
-            for (int i = 0; i < 8; i++) n.Traverse();
+            for (int i = 0; i < 9; i++) n.Traverse();
 
             Assert.True(n.CanTraverse);
             n.Traverse();

@@ -5,7 +5,7 @@
         Puzzle puzzle;
         public PuzzleTeil? PlatziertesTeil {  get; private set; }
         List<PuzzleTeil> todo_liste = new List<PuzzleTeil>();
-        int transform_count = 7;
+        int step = 0;
 
         public SearchNode(Puzzle p)
         {
@@ -18,17 +18,28 @@
 
         public SearchNode Traverse()
         {
-            if (PlatziertesTeil == null)
+            step += 1;
+
+            if (step == 1)
             {
                 PlatziereTeil();
             }
-            else if (transform_count > 0)
+            else if (step == 2 || step == 3 || step == 4)
             {
-                BewegeTeil();
+                PlatziertesTeil.Rotate();
             }
-            else
+            else if (step == 5)
             {
-                throw new InvalidOperationException("cant traverse");
+                PlatziertesTeil.Flip();
+            }
+            else if (step == 6 || step == 7 || step == 8)
+            {
+                PlatziertesTeil.Rotate();
+            }
+            else if (step == 9)
+            {
+                EntferneTeil();
+                step = 0;
             }
 
             return new SearchNode(puzzle);
@@ -41,27 +52,11 @@
             todo_liste.RemoveAt(0);
         }
 
-        void BewegeTeil()
+        void EntferneTeil()
         {
-            Console.WriteLine($"bewege teil {PlatziertesTeil.id} ({transform_count})");
-
-            if (transform_count == 4)
-            {
-                PlatziertesTeil.Flip();
-            }
-            else
-            {
-                PlatziertesTeil.Rotate();
-            }
-
-            transform_count -= 1;
-
-            if (transform_count == 0)
-            {
-                if(!todo_liste.Any()) CanTraverse = false;
-                puzzle.Entferne_Teil(PlatziertesTeil);
-                PlatziertesTeil = null;
-            }
+            puzzle.Entferne_Teil(PlatziertesTeil);
+            PlatziertesTeil = null;
+            if (!todo_liste.Any()) CanTraverse = false;
         }
     }
 }
