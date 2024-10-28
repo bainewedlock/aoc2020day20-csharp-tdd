@@ -47,8 +47,6 @@
             Grid[x, y] = teil;
             if (!ÜbrigeTeile.Remove(teil))
                 throw new ApplicationException("unerwartet");
-
-            //Console.WriteLine($"teil {teil.id} platziert auf {x},{y}");
         }
 
         public void Entferne_Teil(PuzzleTeil teil)
@@ -57,7 +55,6 @@
                 for (int x = 0; x < PuzzleGröße; x++)
                     if (Grid[x, y] == teil)
                     {
-                        //Console.WriteLine($"teil {teil.id} entfernt von {x},{y}");
                         Grid[x, y] = null;
                         ÜbrigeTeile.Add(teil);
                         return;
@@ -131,8 +128,8 @@
                 var n2 = n.Traverse();
                 if (n.PlatziertesTeil != null && Teil_passt(n.PlatziertesTeil))
                 {
-                    Console.Clear();
-                    PrintPuzzle();
+                    //Console.Clear();
+                    //PrintPuzzle();
 
                     if (!ÜbrigeTeile.Any())
                     {
@@ -197,13 +194,6 @@
             return (Grid[0, 0] ?? ÜbrigeTeile.First()).top.Length;
         }
 
-        public void SolveAll()
-        {
-            while (!SolveStep()) 
-            {
-            }
-        }
-
         public void DebugRänder()
         {
             for(int i=0; i<Teile.Length; i++)
@@ -234,19 +224,6 @@
 
                 }
             }
-        }
-
-        public void Part1()
-        {
-            SolveAll();
-            var u = Grid.GetLength(0)-1;
-            long a = Grid[0, 0].id;
-            long b = Grid[u, 0].id;
-            long c = Grid[u, u].id;
-            long d = Grid[0, u].id;
-
-            Console.WriteLine($"part 1 : {a*b*c*d}");
-            Console.WriteLine("66020135789767 is correct");
         }
     }
 }

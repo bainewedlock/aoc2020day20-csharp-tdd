@@ -151,50 +151,16 @@ CCD
 
             var p = new Puzzle(input, 4);
 
-            p.SolveStep();
+            Assert.False(p.SolveStep());
             Assert.That(p.Grid[0, 0]?.id, Is.EqualTo(1), message: "teil 0,0");
 
-            p.SolveStep();
+            Assert.False(p.SolveStep());
             Assert.That(p.Grid[1, 0]?.id, Is.EqualTo(2), message: "teil 1,0");
 
-            p.SolveStep();
+            Assert.False(p.SolveStep());
             Assert.That(p.Grid[2, 0]?.id, Is.EqualTo(3), message: "teil 2,0");
 
-            p.SolveStep();
-            Assert.That(p.Grid[3, 0]?.id, Is.EqualTo(4), message: "teil 3,0");
-        }
-
-        [Test]
-        public void Löst_einfache_Zeile_in_einem_Rutsch()
-        {
-            var input = @"
-Tile 1:
-?AA
-?AA
-?AA
-
-Tile 2:
-ABB
-ABB
-ABB
-
-Tile 3:
-BBC
-BBC
-BBC
-
-Tile 4:
-CCD
-CCD
-CCD
-";
-
-            var p = new Puzzle(input, 4);
-
-            p.SolveAll();
-            Assert.That(p.Grid[0, 0]?.id, Is.EqualTo(1), message: "teil 0,0");
-            Assert.That(p.Grid[1, 0]?.id, Is.EqualTo(2), message: "teil 1,0");
-            Assert.That(p.Grid[2, 0]?.id, Is.EqualTo(3), message: "teil 2,0");
+            Assert.True(p.SolveStep());
             Assert.That(p.Grid[3, 0]?.id, Is.EqualTo(4), message: "teil 3,0");
         }
 
@@ -226,7 +192,8 @@ BBB
 
             var p = new Puzzle(input, 4);
 
-            p.SolveAll();
+            while (!p.SolveStep()) ;
+
             Assert.That(p.Grid[0, 0]?.id, Is.EqualTo(1), message: "teil 0,0");
             Assert.That(p.Grid[1, 0]?.id, Is.EqualTo(2), message: "teil 1,0");
             Assert.That(p.Grid[2, 0]?.id, Is.EqualTo(4), message: "teil 2,0");
