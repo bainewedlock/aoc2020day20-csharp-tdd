@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace aoc2020day20_csharp
+﻿namespace aoc2020day20_csharp
 {
     public class Puzzle
     {
@@ -65,16 +63,22 @@ namespace aoc2020day20_csharp
 
             var (x, y) = FindeFreiePos();
             Grid[x, y] = teil;
-            ÜbrigeTeile.Remove(teil);
+            if (!ÜbrigeTeile.Remove(teil))
+                throw new ApplicationException("unerwartet");
         }
 
         public void Entferne_Teil(PuzzleTeil teil)
         {
             for (int y = 0; y < PuzzleGröße; y++)
                 for (int x = 0; x < PuzzleGröße; x++)
-                    if (Grid[x, y] == teil) Grid[x, y] = null;
+                    if (Grid[x, y] == teil)
+                    {
+                        Grid[x, y] = null;
+                        ÜbrigeTeile.Add(teil);
+                        return;
+                    }
 
-            ÜbrigeTeile.Add(teil);
+            throw new ApplicationException("unerwartet");
         }
 
         (int x, int y) FindeTeil(PuzzleTeil teil)
@@ -89,14 +93,7 @@ namespace aoc2020day20_csharp
         (int x, int y) FindeFreiePos()
         {
             return FindeTeil(null);
-            //for (int y = 0; y < PuzzleGröße; y++)
-            //    for (int x = 0; x < PuzzleGröße; x++)
-            //        if (Grid[x, y] == null)
-            //            return (x, y);
-            //throw new InvalidOperationException("keine freie pos mehr!");
         }
-
-
 
         public bool Teil_passt(PuzzleTeil teil)
         {

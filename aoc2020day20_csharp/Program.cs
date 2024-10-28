@@ -2,11 +2,6 @@
 {
     public class Program
     {
-        public static string Foo()
-        {
-            return "bar";
-        }
-
         static void Main(string[] args)
         {
             var p = new Puzzle(File.ReadAllText("input.txt"));
